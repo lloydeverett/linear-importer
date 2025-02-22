@@ -18,7 +18,7 @@ echo 'LINEAR_API_KEY=<Your Linear API key>' >> ./.env
 ./linear-importer <TEAM_KEYS>
 ```
 
-The program accepts a single argument representing a comma-separated list of team keys. (Running the command with no command line arguments will give a list of available team keys.)
+The program accepts a single argument in the form of a comma-separated list of team keys (e.g. `FOO` or `FOO,BAR`). Running the command with no arguments will give a list of available team keys.
 
 Only milestones, projects and issues associated with one of these keys will be fetched from the Linear API.
 
@@ -64,7 +64,7 @@ Visidata is a visual data viewer for the terminal and is useful for quick lookup
 visidata projects.out
 ```
 
-### GUI options and plotting data
+### Graphical clients and plotting results
 
 Obviously you can use any DB client of choice here. I've had good luck with [Oracle's MySQL extension for VS Code](https://marketplace.visualstudio.com/items?itemName=Oracle.mysql-shell-for-vs-code),
 which allows running queries against a SQLite database in a REPL notebook with Python and JavaScript support included and the ability to draw plots.
