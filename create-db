@@ -3,11 +3,12 @@
 rm -rf sqlite.db
 sqlite3 sqlite.db <<< "
 
-CREATE TABLE projects(id TEXT, name TEXT, sortOrder REAL, json TEXT);
+CREATE TABLE projects(id TEXT, name TEXT, sortOrder REAL, teamId TEXT, json TEXT);
 INSERT INTO projects SELECT 
   json_extract(value, '$.id'), 
   json_extract(value, '$.name'), 
   json_extract(value, '$.sortOrder'),
+  json_extract(value, '$.teamId'),
   json_extract(value, '$')
 FROM json_each(readfile('projects.out'));
 
