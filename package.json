@@ -1,0 +1,15 @@
+{
+  "name": "linear-importer",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "export $(xargs <.env) && node ."
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@linear/sdk": "^27.0.0"
+  }
+}

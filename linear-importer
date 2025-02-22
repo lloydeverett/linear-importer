@@ -1,0 +1,5 @@
+#!/bin/bash
+
+export $(xargs <./.env)
+node ./index.js "$@"
+
