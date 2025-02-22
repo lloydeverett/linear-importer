@@ -97,7 +97,6 @@ for (const team of selectedTeams) {
 	await fetchAll(team.issues.bind(team), i => {
 		if (issues.has(i.id)) {
 			issues.get(i.id).teamIds.push(team.id);
-			console.log('code path ran');
 		} else {
 			issues.set(i.id, { ...i, teamIds: [team.id] });
 		}
