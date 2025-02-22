@@ -1,9 +1,9 @@
 
 # linear-importer
 
-Grabs Linear projects and their milestones using the Linear API and prints them out as a CSV.
+This tool grabs content via the Linear API and produces JSON files for Linear models (projects, milestones, users, etc.).
 
-The intention is to be able to import the file into OmniPlan.
+The resulting files are then loaded into a SQLite database for further manipulation and querying.
 
 ## Setup
 
@@ -14,7 +14,7 @@ echo 'LINEAR_API_KEY=<Your Linear API key>' >> ./.env
 
 ## Usage
 
-### Projects associated with a specific team
+### Load only projects, issues and milestones associated with a specific team
 
 ```bash
 ./linear-importer <TEAM_KEY>
@@ -28,9 +28,5 @@ Run with no command line arguments to get a list of available team keys.
 ./linear-importer 0
 ```
 
-### Including completed projects
-
-```bash
-INCLUDE_COMPLETED_PROJECTS=1 ./linear-importer <TEAM_KEY>
-```
+<!-- Mention use of visidata and sqlite3 for querying (with -> and ->> operators) -->
 

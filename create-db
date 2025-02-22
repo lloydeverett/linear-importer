@@ -1,0 +1,48 @@
+#!/bin/bash
+
+rm -rf sqlite.db
+sqlite3 sqlite.db <<< "
+
+CREATE TABLE projects(id TEXT, name TEXT, sortOrder REAL, json TEXT);
+INSERT INTO projects SELECT 
+  json_extract(value, '$.id'), 
+  json_extract(value, '$.name'), 
+  json_extract(value, '$.sortOrder'),
+  json_extract(value, '$')
+FROM json_each(readfile('projects.out'));
+
+CREATE TABLE milestones(id TEXT, name TEXT, projectId TEXT, sortOrder REAL, json TEXT);
+INSERT INTO milestones SELECT 
+  json_extract(value, '$.id'),
+  json_extract(value, '$.name'),
+  json_extract(value, '$._project.id'),
+  json_extract(value, '$.sortOrder'),
+  json_extract(value, '$')
+FROM json_each(readfile('milestones.out'));
+
+CREATE TABLE teams(id TEXT, name TEXT, json TEXT);
+INSERT INTO teams SELECT 
+  json_extract(value, '$.id'), 
+  json_extract(value, '$.name'), 
+  json_extract(value, '$')
+FROM json_each(readfile('teams.out'));
+
+CREATE TABLE users(id TEXT, name TEXT, json TEXT);
+INSERT INTO users SELECT 
+  json_extract(value, '$.id'), 
+  json_extract(value, '$.name'), 
+  json_extract(value, '$')
+FROM json_each(readfile('users.out'));
+
+CREATE TABLE cycles(id TEXT, number INTEGER, progress REAL, name TEXT, teamId TEXT, json TEXT);
+INSERT INTO cycles SELECT 
+  json_extract(value, '$.id'), 
+  json_extract(value, '$.number'), 
+  json_extract(value, '$.progress'), 
+  json_extract(value, '$.name'), 
+  json_extract(value, '$._team.id'), 
+  json_extract(value, '$')
+FROM json_each(readfile('cycles.out'));
+
+"
+
