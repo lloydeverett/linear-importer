@@ -155,25 +155,3 @@ usersStream.write(JSON.stringify(users));
 const cyclesStream = createWriteStream('cycles.out');
 cyclesStream.write(JSON.stringify(cycles));
 
-// console.log(['WBS Number', 'Title', 'Start', 'End'].join(', '));
-// let projectIndex = 1;
-// let projectsArray = [];
-// for (const [id, p] of projects) {
-// 	projectsArray.push(p);
-// }
-// projectsArray.sort((a, b) => {
-// 	if (a.project.name < b.project.name) { return -1; }
-// 	if (a.project.name > b.project.name) { return 1; }
-// 	return 0;
-// });
-// for (const { project, milestones } of projectsArray) {
-// 	console.log([projectIndex, project.name, project.startDate, project.targetDate].join(', '));
-// 	let milestoneIndex = 1;
-// 	milestones.sort((a, b) => a.sortOrder - b.sortOrder);
-// 	for (const m of milestones) {
-// 		const index = `${projectIndex}.${milestoneIndex++}`;
-// 		console.log([index, m.name, project.startDate, m.targetDate || project.targetDate].join(', '));
-// 	}
-// 	projectIndex++;
-// }
-
