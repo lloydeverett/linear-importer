@@ -2,4 +2,5 @@
 
 export $(xargs <./.env)
 node ./index.js "$@"
+./create-db
 

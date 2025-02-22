@@ -53,34 +53,57 @@ function bindQuery(fn, extraOpts) {
 }
 
 if (process.argv.length < 3) {
-	console.error('error: no team key specified - please choose from the following list:');
+	console.error('error: no team key(s) specified - please choose from the following list:');
         await fetchAll(bindQuery(client.teams), t => console.log(`${t.key} (${t.name})`));
 	process.exit(1);
 }
-const teamKey = process.argv[2];
+const selectedTeamKeys = process.argv[2].split(',');
 let teams = [];
-let team = null;
+let selectedTeams = [];
 await fetchAll(bindQuery(client.teams), t => {
 	teams.push(t);
-	if (t.key === teamKey) {
-		team = t;
-	}
 });
-if (team === null) {
-	console.error(`error: team key ${teamKey} is not valid - please choose from the following list:`);
-	await fetchAll(bindQuery(client.teams), t => console.log(`${t.key} (${t.name})`));
-	process.exit(1);
+for (const selectedTeamKey of selectedTeamKeys) {
+	let selectedTeam = null;
+	for (const team of teams) {
+		if (team.key === selectedTeamKey) {
+			selectedTeam = team;
+			break;
+		}
+	}
+	if (selectedTeam === null) {
+		console.error(`error: team key ${teamKey} is not valid - please choose from the following list:`);
+		await fetchAll(bindQuery(client.teams), t => console.log(`${t.key} (${t.name})`));
+		process.exit(1);
+	}
+	selectedTeams.push(selectedTeam);
 }
 
 let projects = new Map();
+let issues = new Map();
 
-await fetchAll(team.projects.bind(team), p => {
-	projects.set(p.id, {
-		team: team,
-		project: p,
-		milestones: []
+for (const team of selectedTeams) {
+	await fetchAll(team.projects.bind(team), p => {
+		if (projects.has(p.id)) {
+			projects.get(p.id).teamIds.push(team.id);
+		} else {
+			projects.set(p.id, {
+				teamIds: [team.id],
+				project: p,
+				milestones: []
+			});
+		}
 	});
-});
+	await fetchAll(team.issues.bind(team), i => {
+		if (issues.has(i.id)) {
+			issues.get(i.id).teamIds.push(team.id);
+			console.log('code path ran');
+		} else {
+			issues.set(i.id, { ...i, teamIds: [team.id] });
+		}
+	});
+}
+
 
 await fetchAll(bindQuery(client.projectMilestones), m => {
 	const project = projects.get(m._project.id);
@@ -103,9 +126,16 @@ await fetchAll(bindQuery(client.cycles), c => {
 const projectsStream = createWriteStream('projects.out');
 const projectsOutput = [];
 for (const [id, p] of projects) {
-	projectsOutput.push({ ...p.project, teamId: p.team.id });
+	projectsOutput.push({ ...p.project, teamIds: p.teamIds });
 }
 projectsStream.write(JSON.stringify(projectsOutput));
+
+const issuesStream = createWriteStream('issues.out');
+const issuesOutput = [];
+for (const [id, i] of issues) {
+	issuesOutput.push(i);
+}
+issuesStream.write(JSON.stringify(issuesOutput));
 
 const milestonesStream = createWriteStream('milestones.out'); 
 const milestonesOutput = [];
