@@ -26,9 +26,7 @@ Note that for other models, such as the users or teams table, we don't bother fi
 
 ## Output
 
-Linear models will be written to `.out` files in the current directory.
-
-The program will also try to build a SQLite database file from these files by running the `create-db` script. You can rerun this at any point to regenerate the database from the `.out` files without pulling all then data from the Linear API again.
+Linear models will be written to `.out` files in the current directory.  The program will also try to build a SQLite database file from these files by running the `create-db` script. You can rerun this at any point to regenerate the database from the `.out` files without pulling all the data from the Linear API again.
 
 ## Querying the data
 
